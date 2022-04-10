@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EShop.Data;
 using EShop.Models;
+using System.Security.Claims;
 
 namespace EShop.Controllers
 {
@@ -25,14 +26,57 @@ namespace EShop.Controllers
             return View(await _context.Products.ToListAsync());
         }
 
+        //You can either use the synchroneous method like: public IActionResult .. and then  _context....().FirstOrDefault();
+        //^this is good for lower quantities of data
+        //or you can use the async version: public async Task<IActionResult> ... and then await _context....().FirstOrDefaultAsync();
         public async Task<IActionResult> AddToCart(int productId)
         {
-            var product = _context.Products.Where(product => product.ProductId == productId).FirstOrDefault();
+            var product = await _context.Products.Where(product => product.ProductId == productId).FirstOrDefaultAsync();
             var model = new AddToShoppingCartDto();
             model.SelectedProduct = product;
             model.ProductId = product.ProductId;
-            return View(product);
+            model.Quantity = 0;
+
+            // simplified version for instatiating a new object 
+            //var model = new AddToShoppingCartDto
+            //{
+            //    SelectedProduct = product,
+            //    ProductId = product.ProductId,
+            //    Quantity = 0
+
+            //};
+
+            return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToShoppingCart(AddToShoppingCartDto model)
+        {
+            //gets the Id of the currently logged in user 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //we have to use .Include to include the relationships user has
+            var user = _context.Users.Where(u => u.Id == userId).Include("UserShoppingCart.ProductsInShoppingCart").Include("UserShoppingCart.ProductsInShoppingCart.Product").FirstOrDefault();
+            var userShoppingCart = user.UserShoppingCart;
+            if (userShoppingCart != null)
+            {
+                //Find replaces the Where and First or Default functions when looking through the db
+                var product = _context.Products.Find(model.ProductId);
+                if (product != null)
+                {
+                    ProductsInShoppingCart itemToAdd = new ProductsInShoppingCart
+                    {
+                        Product = product,
+                        ShoppingCart = userShoppingCart,
+                        Quantity = model.Quantity
+                    };
+                    //the Add function knows automatically in which table to add the object based on its type
+                    _context.Add(itemToAdd);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)

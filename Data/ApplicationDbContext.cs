@@ -13,10 +13,16 @@ namespace EShop.Data
         public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public virtual DbSet<ProductsInShoppingCart> ProductsInShoppingCarts { get; set; }
         public virtual DbSet<ShopApplicationUser> ShopApplicationUsers { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<ProductInOrder> ProductInOrders{ get; set; }
+
+        //this has to be updated whenever we have a middle table with a composite primary key 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Entity<ProductsInShoppingCart>().HasKey(c => new { c.CartId, c.ProductId });
+
+            builder.Entity<ProductInOrder>().HasKey(c => new { c.OrderId, c.ProductId });
         }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

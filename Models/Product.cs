@@ -14,7 +14,7 @@ namespace EShop.Models
         public string ProductImage { get; set; }
 
         public string ProductDescription { get; set; }
-        public int ProductPrice { get; set; }
+        public float ProductPrice { get; set; }
         public int Rating { get; set; }
         public ICollection<ProductsInShoppingCart> ProductsInShoppingCart { get; set; }
     }

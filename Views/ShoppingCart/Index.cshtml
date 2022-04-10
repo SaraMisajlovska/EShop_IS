@@ -1,0 +1,73 @@
+﻿@model EShop.Models.ShoppingCartDto
+<h1>Shopping Cart</h1>
+@if (Model.ProductsInShoppingCart.Count == 0)
+{
+    <h5>No products in shopping cart</h5>
+}
+else
+{
+    <div class="row">
+        <div class="form-group">
+            <a href="/ShoppingCart/OrderNow" class="btn btn-warning">Order Now</a>
+        </div>
+    </div>
+    <table class="table table-striped" >
+        <thead>
+            <tr>
+                <th class="col-md-1">
+                    #
+                </th>
+                <th class="col-md-7">
+                    Product Name
+                </th>
+                <th class="col-md-2">
+                    Quantity
+                </th>
+                <th class="col-md-1">
+                    Price
+                </th>
+                <th class="col-md-1">
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                var i = 1;
+                foreach (var item in Model.ProductsInShoppingCart)
+                {
+                    <tr>
+                        <td>
+                            @(i++)
+                        </td>
+                        <td>
+                            @item.Product.ProductName
+                        </td>
+                        <td>
+                            @item.Quantity
+                        </td>
+                        <td>
+                            @item.Product.ProductPrice
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="/ShoppingCart/DeleteFromShoppingCart/@item.Product.ProductId">Delete</a>
+                        </td>
+                    </tr>
+
+                }
+
+            }
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Total:</th>
+                <th></th>
+                <th></th>
+                <th>@Model.TotalPrice</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+}

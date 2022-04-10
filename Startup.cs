@@ -31,6 +31,7 @@ namespace EShop
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            //since we have a new user model we have to specify it here
             services.AddDefaultIdentity<ShopApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
