@@ -1,4 +1,4 @@
-﻿@model EShop.Models.ShoppingCartDto
+﻿@model EShop.Domain.DTO.ShoppingCartDto
 <h1>Shopping Cart</h1>
 @if (Model.ProductsInShoppingCart.Count == 0)
 {
@@ -51,7 +51,7 @@ else
                             @item.Product.ProductPrice
                         </td>
                         <td>
-                            <a class="btn btn-danger" href="/ShoppingCart/DeleteFromShoppingCart/@item.Product.ProductId">Delete</a>
+                            <a class="btn btn-danger" href="/ShoppingCart/DeleteFromShoppingCart/@item.Product.Id">Delete</a>
                         </td>
                     </tr>
 

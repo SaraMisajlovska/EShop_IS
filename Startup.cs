@@ -1,5 +1,9 @@
-using EShop.Data;
-using EShop.Models;
+using EShop.Domain.Identity;
+using EShop.Repository;
+using EShop.Repository.Implementation;
+using EShop.Repository.Interface;
+using EShop.Service.Implementation;
+using EShop.Service.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +38,21 @@ namespace EShop
             //since we have a new user model we have to specify it here
             services.AddDefaultIdentity<ShopApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            /* IRepository<ShoppingCart> _shoppingCartRepository,
+    IRepository<ProductInOrder> _productsInOrderRepository,
+    IOrderRepository _orderRepository,
+    IUserRepository _userRepository
+             */
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
+            services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

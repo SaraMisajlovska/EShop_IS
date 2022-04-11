@@ -17,4 +17,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EShop.Repository\EShop.Repository.csproj" />
+    <ProjectReference Include="..\EShop.Service\EShop.Service.csproj" />
+  </ItemGroup>
+
 </Project>
