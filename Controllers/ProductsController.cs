@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
+
 using System.Security.Claims;
 using EShop.Repository;
 using EShop.Domain.DTO;
@@ -101,6 +102,7 @@ namespace EShop.Controllers
         }
 
         // GET: Products/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,7 +115,7 @@ namespace EShop.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+            return View("Index", product);
         }
 
         // POST: Products/Edit/5
